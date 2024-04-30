@@ -1,0 +1,25 @@
+{
+  "name": "xsyx-page-spy-api",
+  "version": "1.8.5",
+  "description": "The binary runner for page-spy-api.",
+  "repository": "https://github.com/HuolalaTech/page-spy-web",
+  "scripts": {},
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "bin": {
+    "page-spy-api": "bin/page-spy-api"
+  },
+  "optionalDependencies": {
+    "@huolala-tech/page-spy-api-linux-amd64": "1.8.5",
+    "@huolala-tech/page-spy-api-linux-arm": "1.8.5",
+    "@huolala-tech/page-spy-api-linux-arm64": "1.8.5",
+    "@huolala-tech/page-spy-api-win32-amd64": "1.8.5",
+    "@huolala-tech/page-spy-api-win32-arm": "1.8.5",
+    "@huolala-tech/page-spy-api-win32-arm64": "1.8.5",
+    "@huolala-tech/page-spy-api-darwin-amd64": "1.8.5",
+    "@huolala-tech/page-spy-api-darwin-arm64": "1.8.5"
+  },
+  "license": "MIT"
+}

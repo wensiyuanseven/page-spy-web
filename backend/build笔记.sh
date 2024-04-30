@@ -13,7 +13,7 @@ GenerateMainPackageJson() {
 
   cat <<EOF > "./npm/${project_name}/package.json"
 {
-  "name":"xsyx-${project_name}",
+  "name":"${organization}/${project_name}",
   "version": "$npm_version",
   "description": "The binary runner for ${project_name}.",
   "repository": "${git_repository}",
@@ -107,16 +107,16 @@ cd ../..
 }
 
 BuildRelease() {
-	mkdir -p "build"
+	mkdir -p "build"  # 创建一个名为`build`的目录。`-p`选项表示如果目录已经存在，不会报错，也不会执行任何操作。
 	mkdir -p "npm"
-	archs=(amd64 arm arm64)
-
+	archs=(amd64 arm arm64)  #定 义了一个包含三个元素的数组`archs`，分别是`amd64`、`arm`和`arm64`。
 	for arch in ${archs[@]}
 	do
+    # 根据指定的目标操作系统和体系结构编译Go语言项目，生成相应的可执行文件  编译后的文件会以`{arch}`的格式保存在`./build`目录下
 		env GOOS=linux GOARCH=${arch} CGO_ENABLED=0 go build  -o ./build/${project_name}-linux-${arch}
     mkdir -p npm/linux-${arch}/bin
-    cp -r ./build/${project_name}-linux-${arch} npm/linux-${arch}/bin/${project_name}
-    # PublishAndGeneratePackageJson "linux" "${arch}" "npm/linux-${arch}"
+    cp -r ./build/${project_name}-linux-${arch} npm/linux-${arch}/bin/${project_name}  # `-r`：递归复制，用于复制目录及其内容。
+    PublishAndGeneratePackageJson "linux" "${arch}" "npm/linux-${arch}"
 	done
 
 	win_archs=(amd64 arm arm64)
@@ -126,7 +126,7 @@ BuildRelease() {
 		env GOOS=windows GOARCH=${arch} CGO_ENABLED=0 go build  -o ./build/${project_name}-win32-${arch}.exe
     mkdir -p npm/win32-${arch}
     cp -r ./build/${project_name}-win32-${arch}.exe npm/win32-${arch}/${project_name}.exe
-    # PublishAndGeneratePackageJson "win32" "${arch}" "npm/win32-${arch}"
+    PublishAndGeneratePackageJson "win32" "${arch}" "npm/win32-${arch}"
 	done
 
 	mac_archs=(amd64 arm64)
@@ -136,7 +136,7 @@ BuildRelease() {
 		env GOOS=darwin GOARCH=${arch} CGO_ENABLED=0 go build  -o ./build/${project_name}-darwin-${arch}
     mkdir -p npm/darwin-${arch}/bin
     cp -r ./build/${project_name}-darwin-${arch} npm/darwin-${arch}/bin/${project_name}
-    # PublishAndGeneratePackageJson "darwin" "${arch}" "npm/darwin-${arch}"
+    PublishAndGeneratePackageJson "darwin" "${arch}" "npm/darwin-${arch}"
 	done
 }
 
@@ -167,11 +167,12 @@ MakeRelease() {
 }
 
 Clean() {
+  # 删除build+npm目录
   rm -rf build
   rm -rf npm
 }
 
 Clean
-# BuildRelease
+BuildRelease
 MakeRelease
 GenerateMainPackageJson
